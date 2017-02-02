@@ -5,6 +5,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { Page1 } from '../pages/page1/page1';
 import { Page2 } from '../pages/page2/page2';
 
+import { Angular2TokenService } from 'angular2-token';
 
 @Component({
   templateUrl: 'app.html'
@@ -16,8 +17,20 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform) {
+  constructor(public platform: Platform, private _tokenService: Angular2TokenService) {
     this.initializeApp();
+    this._tokenService.init({
+      apiBase: 'http://app.fx.bike',
+      apiPath: 'people'
+    });
+
+    this._tokenService.signIn({
+      email:    'example@example.org',
+      password: 'secretPassword'
+    }).subscribe(
+      res =>      console.log(res),
+      error =>    console.log(error)
+    );
 
     // used for an example of ngFor and navigation
     this.pages = [
